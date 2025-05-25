@@ -33,12 +33,12 @@ const data = {
     navMain: [
       {
         title: "Dashboard",
-        url: "#",
+        url: "/dashboard",
         icon: LayoutDashboardIcon,
       },
       {
         title: "Tickets",
-        url: "#",
+        url: "/tickets",
         icon: TicketCheckIcon,
       },
       {
@@ -118,7 +118,7 @@ const data = {
     navSecondary: [
       {
         title: "Settings",
-        url: "#",
+        url: "/settings",
         icon: SettingsIcon,
       },
       {
@@ -154,14 +154,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>){
                         <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
                             <Link href={"/dashboard"}>
                                 <ArrowUpCircleIcon className="h-5 w-5" />
-                                <span className="text-base font-semibold tracking-widest">AI Helpdesk</span>
+                                <span className="text-base font-semibold tracking-widest">Helpdesk Pro</span>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain}/>
+                <NavMain items={data.navMain} />
                 <NavDocuments items={data.documents} />
                 <NavSecondary items={data.navSecondary} className="mt-auto"/>
             </SidebarContent>
