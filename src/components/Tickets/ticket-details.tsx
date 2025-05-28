@@ -19,9 +19,9 @@ export async function TicketDetails({ ticketId }: TicketDetailProps) {
             <CardContent>
                 <div className="space-y-4">
                     <div className="text-sm text-muted-foreground">
-                        Created by {ticket.id} on {ticket.createdAt.toDateString()}
+                        Created by {ticket.user.name} on {ticket.createdAt.toDateString()}
                     </div>
-                    <div className="whitespace-pre-line">
+                    <div className="whitespace-pre-line bg-muted p-4 rounded-md">
                         {ticket.description}
                     </div>
                 </div>

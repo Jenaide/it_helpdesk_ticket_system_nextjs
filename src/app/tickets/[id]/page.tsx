@@ -2,6 +2,7 @@ import { getTicketById } from "@/actions/ticket.actions";
 import { TicketActions } from "@/components/Tickets/ticket-actions";
 import { TicketComments } from "@/components/Tickets/ticket-comments";
 import { TicketDetails } from "@/components/Tickets/ticket-details";
+import { TicketSidebar } from "@/components/Tickets/ticket-sidebar";
 import { ArrowBigLeft } from "lucide-react";
 import { Metadata } from "next"
 import Link from "next/link";
@@ -13,10 +14,12 @@ export const metadata: Metadata = {
 }
 
 interface TicketDetailsProps {
-  id: string;
+  params: {
+    id: string;
+  }
 }
-export default async function TicketDetailsPage( props: { params: Promise<TicketDetailsProps> }){
-  const { id } = await props.params;
+export default async function TicketDetailsPage({ params }: TicketDetailsProps) {
+  const { id } = await params;
   const ticket = await getTicketById(id);
   if (!ticket) {
     notFound();
@@ -32,39 +35,11 @@ export default async function TicketDetailsPage( props: { params: Promise<Ticket
           <TicketActions ticketId={id} />
         </div>
         <div className="grid gap-4 md:grid-cols-3">
+            {/* Sidebar with ticket metadata and actions */}
+            <TicketSidebar ticketId={id}/>
           <div className="space-y-2 md:col-span-3">
             <TicketDetails ticketId={id} />
             <TicketComments ticketId={id} />
-          </div>
-          <div>
-            {/* Sidebar with ticket metadata and actions */}
-            <div className="space-y-4">
-              <div className="rounded-lg border p-4">
-                <h3 className="mb-2 font-medium">Ticket Information</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Status:</span>
-                    <span className="font-medium">{ticket.status}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Priority:</span>
-                    <span className="font-medium">{ticket.priority}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Created:</span>
-                    <span className="font-medium">{ticket.createdAt.toUTCString()}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Updated:</span>
-                    <span className="font-medium">{ticket.updatedAt.toUTCString()}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Assigned to:</span>
-                    <span className="font-medium">John Smith</span>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

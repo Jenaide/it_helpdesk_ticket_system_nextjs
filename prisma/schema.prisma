@@ -31,6 +31,7 @@ model User {
   sessions      Session[]
   tickets       Ticket[] // tickets created by the user
 
+  comments      Comments[] // comments made by the user
   assignedTickets Ticket[] @relation("AssignedTickets") // tickets assigned to technician
  
   createdAt DateTime @default(now())
@@ -79,6 +80,24 @@ model Ticket {
   priority        TicketPriority
   status          TicketStatus  @default(OPEN)
   category        Category
+
+  comments        Comments[]
+}
+
+model Comments {
+  id         Int @id @default(autoincrement())
+  content     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  ticketId    Int
+  ticket      Ticket @relation(fields: [ticketId], references: [id])
+
+  userId      String
+  user        User @relation(fields: [userId], references: [id])
+
+  @@index([ticketId])
+  @@index([userId])
 }
  
 model Account {
