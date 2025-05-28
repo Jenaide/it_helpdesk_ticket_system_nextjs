@@ -1,5 +1,6 @@
 "use client";
 
+import { registerUser } from "@/actions/auth.actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,12 +9,35 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export function SignupForm() {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [role, setRole] = useState("user");
     const router = useRouter();
+
+    const initialState = {
+        success: false,
+        message: "",
+    }
+    const [state, formAction] = useActionState(registerUser, initialState);
+
+    useEffect(() => {
+        setIsLoading(false);
+        if (state.success) {
+            toast.success("Registration successful! Redirecting ...");
+            // role-based redirection
+            if (role === "USER") {
+                router.push("/tickets");
+            } else if (role === "TECHNICIAN" || role === "ADMINISTRATOR") {
+                router.push("/verification");
+            }
+            router.refresh();
+        } else if (state.message) {
+            toast.error(state.message);
+        }
+    }, [state,role, router]);
     return (
         <div className="flex flex-col">
             <Card>
@@ -24,7 +48,10 @@ export function SignupForm() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form>
+                    <form action={async (formData) => {
+                        setIsLoading(true);
+                        await formAction(formData)
+                    }}>
                         <div className="grid gap-4">
                             <div className="flex flex-col gap-4">
                                 <Button variant="outline" className="w-full">
@@ -54,31 +81,51 @@ export function SignupForm() {
                             </div>
                             <div className="grid gap-3">
                                 <div className="grid gap-2">
+                                    <Label htmlFor="email">Name</Label>
+                                    <Input 
+                                        id="name"
+                                        name="name"
+                                        type="text"
+                                        placeholder="John Doe"
+                                        autoComplete="name"
+                                        required
+                                    />
+                                </div>
+                                <div className="grid gap-2">
                                     <Label htmlFor="email">Email</Label>
                                     <Input 
                                         id="email"
                                         type="email"
+                                        name="email"
                                         placeholder="example@example.co.za"
+                                        autoComplete="email"
                                         required
                                     />
                                 </div>
                                 <div className="grid gap-2">
                                     <div className="flex items-center justify-between">
                                         <Label htmlFor="password">Password</Label>
-                                        
                                     </div>
-                                    <Input id="password" type="password" required />
+                                    <Input 
+                                        id="password" 
+                                        type="password"
+                                        name="password"
+                                        autoComplete="new-password" 
+                                        placeholder="**********" 
+                                        required 
+                                    />
                                 </div>
-                                <div className="flex gap-3">
+                               <div className="flex gap-3">
                                     <Label htmlFor="role">Role</Label>
-                                    <Select>
+                                    <Input type="hidden" name="role" value={role} />
+                                    <Select value={role} onValueChange={setRole}>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select a role" />
+                                            <SelectValue placeholder="Select a role"/>
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="user">User</SelectItem>
-                                            <SelectItem value="technician">Technician</SelectItem>
-                                            <SelectItem value="administrator">Administrator</SelectItem>
+                                            <SelectItem value="USER">User</SelectItem>
+                                            <SelectItem value="TECHNICIAN">Technician</SelectItem>
+                                            <SelectItem value="ADMINISTRATOR">Administrator</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <p className="text-xs text-muted-foreground mt-1">Note: Admin and technician roles require approval</p>

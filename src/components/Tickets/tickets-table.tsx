@@ -48,13 +48,15 @@ export async function TicketsTable() {
                                 <TableCell>
                                     <Badge
                                         variant={
-                                            ticket.status === "Open"
+                                            ticket.status === "OPEN"
                                             ? "default"
-                                            : ticket.status === "in-Progress"
+                                            : ticket.status === "IN_PROGRESS"
                                             ? "medium"
-                                            : ticket.status === "Resolved"
+                                            : ticket.status === "RESOLVED"
                                             ? "secondary"
-                                            : "outline"
+                                            : ticket.status === "CLOSED"
+                                            ? "outline"
+                                            : "default"
                                         }
                                     >
                                         {ticket.status}
@@ -62,15 +64,16 @@ export async function TicketsTable() {
                                 </TableCell>
                                 <TableCell>
                                     <Badge variant={
-                                        ticket.priority === "high" 
-                                        ? "destructive" 
-                                        : ticket.priority === "medium" 
-                                        ? "medium"
-                                        : ticket.priority === "critical"
-                                        ? "destructive"
-                                        : ticket.priority === "low"
-                                        ? "outline" : "default"
-                                    }
+                                        ticket.priority === "HIGH"
+                                            ? "destructive"
+                                            : ticket.priority === "MEDIUM"
+                                            ? "medium"
+                                            : ticket.priority === "CRITICAL"
+                                            ? "destructive"
+                                            : ticket.priority === "LOW"
+                                            ? "outline"
+                                            : "default"
+                                        }
                                     >
                                         {ticket.priority}
                                     </Badge>
@@ -78,27 +81,27 @@ export async function TicketsTable() {
                                 <TableCell>
                                     <Badge
                                         variant={
-                                            ticket.category === "Technical"
-                                            ? "default"
-                                            : ticket.category === "Software"
-                                            ? "secondary"
-                                            : ticket.category === "Hardware"
-                                            ? "secondary"
-                                            : ticket.category === "Network"
-                                            ? "default"
-                                            : ticket.category === "Access"
-                                            ? "destructive"
-                                            : ticket.category === "Other"
-                                            ? "default"
-                                            : "outline"
-                                        }
+                                            ticket.category === "TECHNICAL"
+                                                ? "default"
+                                                : ticket.category === "SOFTWARE"
+                                                ? "secondary"
+                                                : ticket.category === "HARDWARE"
+                                                ? "secondary"
+                                                : ticket.category === "NETWORK"
+                                                ? "default"
+                                                : ticket.category === "ACCESS"
+                                                ? "destructive"
+                                                : ticket.category === "OTHER"
+                                                ? "default"
+                                                : "outline"
+                                            }
                                     >
                                         {ticket.status}
                                     </Badge>
                                 </TableCell>
-                                <TableCell>owner</TableCell>
-                                <TableCell>{ticket.createdAt.toUTCString()}</TableCell>
-                                <TableCell>{ticket.updatedAt.toUTCString()}</TableCell>
+                                <TableCell>{ticket.user?.name}</TableCell>
+                                <TableCell>{ticket.createdAt.toLocaleDateString()}</TableCell>
+                                <TableCell>{ticket.updatedAt.toLocaleDateString()}</TableCell>
                                 <TableCell className="text-right">
                                     <Link href={`/tickets/${ticket.id}`}>
                                         <Button variant={"ghost"} size={"sm"}>

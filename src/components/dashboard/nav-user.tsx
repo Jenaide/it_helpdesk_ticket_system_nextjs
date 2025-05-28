@@ -2,10 +2,11 @@
 import { BellIcon, CreditCardIcon, LogOutIcon, MoreVerticalIcon, UserCircleIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "../ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
+import { getCurrentUser } from "@/lib/current-user";
 
-export function NavUser({user,}: {user: {name: string, email: string, avatar: string}}) {
-    const { isMobile } = useSidebar();
+export async function NavUser() {
+    const user = getCurrentUser();
     return (
         <SidebarMenu>
             <SidebarMenuItem>
@@ -27,7 +28,7 @@ export function NavUser({user,}: {user: {name: string, email: string, avatar: st
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                         className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                        side={isMobile ? "bottom" : "right"}
+                        
                         align="end"
                         sideOffset={4}
                     >

@@ -3,7 +3,7 @@ import { SignupForm } from "@/components/forms/auth/signup-form";
 
 export default function Signup() {
     return (
-        <div className="flex min-h-svh flex-col items-center justify-center p-6 gap-6 bg-muted md:p-10">
+        <div className="flex min-h-svh flex-col items-center justify-center p-6 gap-6 bg-muted md:p-2">
             <div className="flex w-full max-w-sm flex-col gap-4">
                 <div className="flex items-center gap-2 self-center font-medium">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
@@ -15,7 +15,7 @@ export default function Signup() {
                             className="h-8 w-8 rounded-full object-cover" 
                         />
                     </div>
-                    <span className="tracking-widest">Ai Help Desk</span>
+                    <span className="tracking-widest">HelpDesk Pro</span>
                 </div>
                 <SignupForm />
             </div>

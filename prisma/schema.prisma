@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -17,7 +16,7 @@ datasource db {
 enum Role {
   USER
   TECHNICIAN
-  ADMIN
+  ADMINISTRATOR
 }
 
 model User {
@@ -25,29 +24,61 @@ model User {
   name          String?
   email         String          @unique
   password      String
+  avatar        String?
 
   role          Role            @default(USER)
   accounts      Account[]
   sessions      Session[]
-  tickets       Ticket[]
+  tickets       Ticket[] // tickets created by the user
+
+  assignedTickets Ticket[] @relation("AssignedTickets") // tickets assigned to technician
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Enums for ticket priority, status and category.
+// These enums can be used to categorize tickets based on their urgency and current state.
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum Category {
+  TECHNICAL
+  SOFTWARE
+  HARDWARE
+  NETWORK
+  ACCESS
+  OTHER
 }
 
 model Ticket {
   id              Int @id @default(autoincrement())
   subject         String
   description     String
-  priority        String
-  category        String
   
-  status          String @default("Open")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   userId          String
   user            User  @relation(fields: [userId], references: [id])
+
+  assignedToId    String?  // technician id
+  assignedTo      User?    @relation("AssignedTickets", fields: [assignedToId], references: [id])
+
+  priority        TicketPriority
+  status          TicketStatus  @default(OPEN)
+  category        Category
 }
  
 model Account {
